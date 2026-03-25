@@ -168,26 +168,11 @@ export default function SettingsHeaderNavModules(props) {
       description: t('用户主页，展示系统信息'),
     },
     {
-      key: 'console',
-      title: t('控制台'),
-      description: t('用户控制面板，管理账户'),
-    },
-    {
       key: 'pricing',
       title: t('模型广场'),
       description: t('模型定价，需要登录访问'),
       hasSubConfig: true, // 标识该模块有子配置
-    },
-    {
-      key: 'docs',
-      title: t('文档'),
-      description: t('系统文档和帮助信息'),
-    },
-    {
-      key: 'about',
-      title: t('关于'),
-      description: t('关于系统的详细信息'),
-    },
+    }
   ];
 
   return (
