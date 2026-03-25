@@ -810,6 +810,7 @@ const LoginForm = () => {
                     htmlType='submit'
                     onClick={handleSubmit}
                     loading={loginLoading}
+                    style={{ color: '#000', backgroundColor: '#FF5A5A' }}
                     disabled={
                       (hasUserAgreement || hasPrivacyPolicy) && !agreedToTerms
                     }
