@@ -18,6 +18,14 @@
   --sidebar-width: 180px;
   --sidebar-width-collapsed: 60px;
   --sidebar-current-width: var(--sidebar-width);
+  /* Semi UI 全局主色（含首页「获取密钥」等 type=primary 按钮） */
+  --semi-color-primary: #ff5a5a;
+  --semi-color-primary-hover: #ff7373;
+  --semi-color-primary-active: #ff3d3d;
+  --semi-color-primary-disabled: rgba(255, 90, 90, 0.35);
+  --semi-color-primary-light-default: rgba(255, 90, 90, 0.14);
+  --semi-color-primary-light-hover: rgba(255, 90, 90, 0.22);
+  --semi-color-primary-light-active: rgba(255, 90, 90, 0.3);
 }
 
 body.sidebar-collapsed {
@@ -29,6 +37,11 @@ body {
     sans-serif;
   color: var(--semi-color-text-0);
   background-color: var(--semi-color-bg-0);
+}
+
+/* 全局超链接 hover 颜色（排除 Semi 按钮型 <a>，避免覆盖主按钮文字色） */
+#root a:not(.semi-button):hover {
+  color: #ff5a5a;
 }
 
 .app-layout {
@@ -919,6 +932,19 @@ html.dark .with-pastel-balls::before {
   flex: 1;
   overflow: auto;
   min-height: 0;
+}
+
+/* ==================== Semi 主按钮：全局覆盖背景色 ==================== */
+.semi-button-primary:not(:disabled):not(.semi-button-disabled) {
+  background-color: #ff5a5a !important;
+}
+
+.semi-button-primary:not(:disabled):not(.semi-button-disabled):hover {
+  background-color: #ff7373 !important;
+}
+
+.semi-button-primary:not(:disabled):not(.semi-button-disabled):active {
+  background-color: #ff3d3d !important;
 }
 
 /* ==================== semi-ui 组件自定义样式 ==================== */
