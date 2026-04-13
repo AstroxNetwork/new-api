@@ -43,7 +43,22 @@ export const useNavigation = (t, docsLink, headerNavModules) => {
         text: t('模型广场'),
         itemKey: 'pricing',
         to: '/pricing',
-      }
+      },
+      ...(docsLink
+        ? [
+            {
+              text: t('文档'),
+              itemKey: 'docs',
+              isExternal: true,
+              externalLink: docsLink,
+            },
+          ]
+        : []),
+      {
+        text: t('关于'),
+        itemKey: 'about',
+        to: '/about',
+      },
     ];
 
     // 根据配置过滤导航链接
