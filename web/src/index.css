@@ -357,6 +357,21 @@ code {
   text-overflow: ellipsis;
 }
 
+/* Active state with outlined style (for filter groups) */
+.sbg-button.sbg-button-active,
+.sbg-button.sbg-button-active:hover,
+.sbg-button.sbg-button-active:focus,
+.sbg-button.sbg-button-active:active {
+  background-color: transparent !important;
+  border-color: var(--sbg-active-border, var(--semi-color-primary)) !important;
+  color: var(--sbg-active-text, var(--semi-color-primary)) !important;
+  box-shadow: inset 0 0 0 1px var(--sbg-active-border, var(--semi-color-primary));
+}
+
+.sbg-button.sbg-button-active .semi-button-content {
+  color: var(--sbg-active-text, var(--semi-color-primary)) !important;
+}
+
 /* Badge for count/multiplier in filter buttons */
 .sbg-badge {
   display: inline-flex;
@@ -377,8 +392,9 @@ code {
 }
 
 .sbg-badge-active {
-  background-color: var(--semi-color-primary-light-active);
-  color: var(--semi-color-primary);
+  background-color: transparent;
+  color: var(--sbg-active-text, var(--semi-color-primary));
+  border: 1px solid var(--sbg-active-border, var(--semi-color-primary));
 }
 
 /* ---- SelectableButtonGroup color variants ---- */
@@ -387,6 +403,9 @@ code {
   --semi-color-primary-light-default: rgba(124, 58, 237, 0.08);
   --semi-color-primary-light-hover: rgba(124, 58, 237, 0.15);
   --semi-color-primary-light-active: rgba(124, 58, 237, 0.22);
+  --sbg-active-bg: #0f1020;
+  --sbg-active-border: #ff5d79;
+  --sbg-active-text: #9f7aea;
 }
 
 .sbg-variant-teal {
@@ -394,6 +413,9 @@ code {
   --semi-color-primary-light-default: rgba(20, 184, 166, 0.08);
   --semi-color-primary-light-hover: rgba(20, 184, 166, 0.15);
   --semi-color-primary-light-active: rgba(20, 184, 166, 0.22);
+  --sbg-active-bg: #0d1718;
+  --sbg-active-border: #35d3c7;
+  --sbg-active-text: #2fb5ab;
 }
 
 .sbg-variant-amber {
@@ -401,6 +423,9 @@ code {
   --semi-color-primary-light-default: rgba(245, 158, 11, 0.08);
   --semi-color-primary-light-hover: rgba(245, 158, 11, 0.15);
   --semi-color-primary-light-active: rgba(245, 158, 11, 0.22);
+  --sbg-active-bg: #19150a;
+  --sbg-active-border: #f9ac30;
+  --sbg-active-text: #d89614;
 }
 
 .sbg-variant-rose {
@@ -408,6 +433,9 @@ code {
   --semi-color-primary-light-default: rgba(244, 63, 94, 0.08);
   --semi-color-primary-light-hover: rgba(244, 63, 94, 0.15);
   --semi-color-primary-light-active: rgba(244, 63, 94, 0.22);
+  --sbg-active-bg: #1a0e15;
+  --sbg-active-border: #fb5f86;
+  --sbg-active-text: #ec5f8b;
 }
 
 .sbg-variant-green {
@@ -415,6 +443,9 @@ code {
   --semi-color-primary-light-default: rgba(16, 185, 129, 0.08);
   --semi-color-primary-light-hover: rgba(16, 185, 129, 0.15);
   --semi-color-primary-light-active: rgba(16, 185, 129, 0.22);
+  --sbg-active-bg: #0c1613;
+  --sbg-active-border: #38d39f;
+  --sbg-active-text: #20ad7f;
 }
 
 /* Dark mode: lighter text, slightly stronger backgrounds */
@@ -423,6 +454,9 @@ html.dark .sbg-variant-violet {
   --semi-color-primary-light-default: rgba(139, 92, 246, 0.14);
   --semi-color-primary-light-hover: rgba(139, 92, 246, 0.22);
   --semi-color-primary-light-active: rgba(139, 92, 246, 0.3);
+  --sbg-active-bg: #0a0b15;
+  --sbg-active-border: #ff5f8a;
+  --sbg-active-text: #b58dff;
 }
 
 html.dark .sbg-variant-teal {
@@ -430,6 +464,9 @@ html.dark .sbg-variant-teal {
   --semi-color-primary-light-default: rgba(45, 212, 191, 0.14);
   --semi-color-primary-light-hover: rgba(45, 212, 191, 0.22);
   --semi-color-primary-light-active: rgba(45, 212, 191, 0.3);
+  --sbg-active-bg: #0a1415;
+  --sbg-active-border: #52e0d1;
+  --sbg-active-text: #5edccd;
 }
 
 html.dark .sbg-variant-amber {
@@ -437,6 +474,9 @@ html.dark .sbg-variant-amber {
   --semi-color-primary-light-default: rgba(251, 191, 36, 0.14);
   --semi-color-primary-light-hover: rgba(251, 191, 36, 0.22);
   --semi-color-primary-light-active: rgba(251, 191, 36, 0.3);
+  --sbg-active-bg: #181208;
+  --sbg-active-border: #ffc64a;
+  --sbg-active-text: #ffd56e;
 }
 
 html.dark .sbg-variant-rose {
@@ -444,6 +484,9 @@ html.dark .sbg-variant-rose {
   --semi-color-primary-light-default: rgba(251, 113, 133, 0.14);
   --semi-color-primary-light-hover: rgba(251, 113, 133, 0.22);
   --semi-color-primary-light-active: rgba(251, 113, 133, 0.3);
+  --sbg-active-bg: #180e14;
+  --sbg-active-border: #ff7c9a;
+  --sbg-active-text: #ff96ad;
 }
 
 html.dark .sbg-variant-green {
@@ -451,6 +494,9 @@ html.dark .sbg-variant-green {
   --semi-color-primary-light-default: rgba(52, 211, 153, 0.14);
   --semi-color-primary-light-hover: rgba(52, 211, 153, 0.22);
   --semi-color-primary-light-active: rgba(52, 211, 153, 0.3);
+  --sbg-active-bg: #0c1712;
+  --sbg-active-border: #49dcaa;
+  --sbg-active-text: #70e7be;
 }
 
 /* Tabs组件样式 */

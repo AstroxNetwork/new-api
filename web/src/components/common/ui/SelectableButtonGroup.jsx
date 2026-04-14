@@ -190,9 +190,9 @@ const SelectableButtonGroup = ({
                 onClick={() => {
                   /* disabled */
                 }}
-                theme={isActive ? 'light' : 'outline'}
-                type={isActive ? 'primary' : 'tertiary'}
-                className='sbg-button'
+                theme='outline'
+                type='tertiary'
+                className={`sbg-button ${isActive ? 'sbg-button-active' : ''}`}
                 icon={
                   <Checkbox
                     checked={isActive}
@@ -220,9 +220,9 @@ const SelectableButtonGroup = ({
           <Col span={getColSpan()} key={item.value}>
             <Button
               onClick={() => onChange(item.value)}
-              theme={isActive ? 'light' : 'outline'}
-              type={isActive ? 'primary' : 'tertiary'}
-              className='sbg-button'
+              theme='outline'
+              type='tertiary'
+              className={`sbg-button ${isActive ? 'sbg-button-active' : ''}`}
               style={{ width: '100%' }}
             >
               <div className='sbg-content'>

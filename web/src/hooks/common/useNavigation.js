@@ -27,7 +27,6 @@ export const useNavigation = (t, docsLink, headerNavModules) => {
       console: true,
       pricing: true,
       docs: true,
-      about: true,
     };
 
     // 使用传入的配置或默认配置
@@ -54,11 +53,6 @@ export const useNavigation = (t, docsLink, headerNavModules) => {
             },
           ]
         : []),
-      {
-        text: t('关于'),
-        itemKey: 'about',
-        to: '/about',
-      },
     ];
 
     // 根据配置过滤导航链接
