@@ -19,7 +19,14 @@ func DecodeJson(reader io.Reader, v any) error {
 }
 
 func Marshal(v any) ([]byte, error) {
-	return json.Marshal(v)
+	var buf bytes.Buffer
+	encoder := json.NewEncoder(&buf)
+	encoder.SetEscapeHTML(false)
+	if err := encoder.Encode(v); err != nil {
+		return nil, err
+	}
+	// json.Encoder.Encode appends a trailing newline, keep Marshal semantics.
+	return bytes.TrimSuffix(buf.Bytes(), []byte("\n")), nil
 }
 
 func GetJsonType(data json.RawMessage) string {

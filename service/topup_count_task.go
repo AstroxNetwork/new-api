@@ -101,7 +101,7 @@ func sendTopUpCountToFeishu(webhookURL string, startTime int64, endTime int64, c
 	msg := feishuTextMessage{
 		MsgType: "text",
 	}
-	msg.Content.Text = fmt.Sprintf("订单: %d", count)
+	msg.Content.Text = fmt.Sprintf("时间范围: %s ~ %s\n订单: %d", start, end, count)
 
 	body, err := common.Marshal(msg)
 	if err != nil {

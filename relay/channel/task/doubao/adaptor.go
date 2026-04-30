@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/QuantumNous/new-api/common"
@@ -29,7 +30,8 @@ type ContentItem struct {
 	Type     string          `json:"type"`                // "text", "image_url" or "video"
 	Text     string          `json:"text,omitempty"`      // for text type
 	ImageURL *ImageURL       `json:"image_url,omitempty"` // for image_url type
-	Video    *VideoReference `json:"video,omitempty"`     // for video (sample) type
+	VideoURL *VideoReference `json:"video_url,omitempty"` // for reference video
+	AudioURL *AudioReference `json:"audio_url,omitempty"` // for reference audio
 	Role     string          `json:"role,omitempty"`      // reference_image / first_frame / last_frame
 }
 
@@ -39,6 +41,10 @@ type ImageURL struct {
 
 type VideoReference struct {
 	URL string `json:"url"` // Draft video URL
+}
+
+type AudioReference struct {
+	URL string `json:"url"`
 }
 
 type requestPayload struct {
@@ -103,8 +109,66 @@ func (a *TaskAdaptor) Init(info *relaycommon.RelayInfo) {
 
 // ValidateRequestAndSetAction parses body, validates fields and sets default action.
 func (a *TaskAdaptor) ValidateRequestAndSetAction(c *gin.Context, info *relaycommon.RelayInfo) (taskErr *dto.TaskError) {
-	// Accept only POST /v1/video/generations as "generate" action.
-	return relaycommon.ValidateBasicTaskRequest(c, info, constant.TaskActionGenerate)
+	contentType := c.GetHeader("Content-Type")
+	if strings.HasPrefix(contentType, "multipart/form-data") {
+		return relaycommon.ValidateBasicTaskRequest(c, info, constant.TaskActionGenerate)
+	}
+
+	var req relaycommon.TaskSubmitReq
+	if err := common.UnmarshalBodyReusable(c, &req); err != nil {
+		return &dto.TaskError{
+			Code:       "invalid_request",
+			Message:    err.Error(),
+			StatusCode: http.StatusBadRequest,
+			LocalError: true,
+			Error:      err,
+		}
+	}
+
+	// Keep compatibility with single-image field.
+	if len(req.Images) == 0 && strings.TrimSpace(req.Image) != "" {
+		req.Images = []string{req.Image}
+	}
+	if req.Metadata == nil {
+		req.Metadata = make(map[string]interface{})
+	}
+
+	var raw map[string]interface{}
+	if err := common.UnmarshalBodyReusable(c, &raw); err == nil {
+		for key, val := range raw {
+			if !isKnownDoubaoTaskField(key) {
+				req.Metadata[key] = val
+			}
+		}
+	}
+
+	var ext struct {
+		Content []ContentItem `json:"content,omitempty"`
+	}
+	if err := common.UnmarshalBodyReusable(c, &ext); err == nil && len(ext.Content) > 0 {
+		req.Metadata["content"] = ext.Content
+		if strings.TrimSpace(req.Prompt) == "" {
+			for _, item := range ext.Content {
+				if item.Type == "text" && strings.TrimSpace(item.Text) != "" {
+					req.Prompt = item.Text
+					break
+				}
+			}
+		}
+	}
+
+	if strings.TrimSpace(req.Prompt) == "" && len(ext.Content) == 0 {
+		return &dto.TaskError{
+			Code:       "invalid_request",
+			Message:    "prompt or content is required",
+			StatusCode: http.StatusBadRequest,
+			LocalError: true,
+		}
+	}
+
+	info.Action = constant.TaskActionGenerate
+	c.Set("task_request", req)
+	return nil
 }
 
 // BuildRequestURL constructs the upstream URL.
@@ -308,4 +372,20 @@ func (a *TaskAdaptor) ConvertToOpenAIVideo(originTask *model.Task) ([]byte, erro
 	}
 
 	return common.Marshal(openAIVideo)
+}
+
+func isKnownDoubaoTaskField(field string) bool {
+	knownFields := map[string]bool{
+		"prompt":          true,
+		"model":           true,
+		"mode":            true,
+		"image":           true,
+		"images":          true,
+		"size":            true,
+		"duration":        true,
+		"seconds":         true,
+		"input_reference": true,
+		"metadata":        true,
+	}
+	return knownFields[field]
 }
