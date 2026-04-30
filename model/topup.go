@@ -55,6 +55,18 @@ func GetTopUpByTradeNo(tradeNo string) *TopUp {
 	return topUp
 }
 
+// CountTopUpsByCreateTimeRange 统计指定创建时间范围内的充值记录数量（含边界）
+func CountTopUpsByCreateTimeRange(startTime int64, endTime int64) (int64, error) {
+	var total int64
+	err := DB.Model(&TopUp{}).
+		Where("create_time >= ? AND create_time <= ?", startTime, endTime).
+		Count(&total).Error
+	if err != nil {
+		return 0, err
+	}
+	return total, nil
+}
+
 func Recharge(referenceId string, customerId string) (err error) {
 	if referenceId == "" {
 		return errors.New("未提供支付单号")

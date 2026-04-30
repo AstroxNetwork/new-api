@@ -112,6 +112,10 @@ func main() {
 	// Subscription quota reset task (daily/weekly/monthly/custom)
 	service.StartSubscriptionQuotaResetTask()
 
+	// TopUp daily count task: run every day at 01:00 and count yesterday records
+	topUpFeishuWebhookURL := common.GetEnvOrDefaultString("TOP_UP_COUNT_TASK_FEISHU_WEBHOOK_URL", "")
+	service.StartTopUpCountTask(topUpFeishuWebhookURL)
+
 	// Wire task polling adaptor factory (breaks service -> relay import cycle)
 	service.GetTaskAdaptorFunc = func(platform constant.TaskPlatform) service.TaskPollingAdaptor {
 		a := relay.GetTaskAdaptor(platform)
